@@ -18,6 +18,7 @@ class MyOctant
 	vector3 m_v3Size;
 	MeshManagerSingleton* m_pMeshMngr = nullptr;
 	MyBOManager* m_pBOMngr = nullptr;
+	bool isVisible;
 
 	//banana
 	std::vector<MyBOClass> m_lNumOfObjs = std::vector<MyBOClass>();
@@ -65,13 +66,12 @@ public:
 	Output: ---
 	*/
 	void Swap(MyOctant& other);
-
 	void Display(void);
-
+	bool GetVisibility(void);
+	void ToggleVisible(void);
 	void Subdivide(void);
 	void ReleaseChildren(void);
 	void CheckForObjs(void);
-
 private:
 	/*
 	Method: Release

@@ -75,7 +75,10 @@ void AppClass::Update(void)
 	//m_pMeshMngr->AddSkyboxToRenderList("Skybox_01.png");
 	m_pMeshMngr->AddInstanceToRenderList("ALL");
 
-	m_pOctreeHead->Display();
+	if (m_pOctreeHead->GetVisibility()) {
+			m_pOctreeHead->Display();
+	}
+
 
 	//Indicate the FPS
 	int nFPS = m_pSystem->GetFPS();

@@ -41,6 +41,8 @@ void AppClass::ProcessKeyboard(void)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		m_pCameraMngr->MoveVertical(fSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+		m_pOctreeHead->ToggleVisible();
 #pragma endregion
 
 #pragma region Other Actions

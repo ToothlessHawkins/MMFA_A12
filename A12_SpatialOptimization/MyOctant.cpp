@@ -8,11 +8,12 @@ void MyOctant::Init(void)
 	m_pMeshMngr = MeshManagerSingleton::GetInstance();
 	m_fSize = 0.0f;
 	m_nChildCount = 0;
-	
+	isVisible = true;
 	m_pBOMngr = MyBOManager::GetInstance();
 
 	if (m_bHead)
 	{
+		
 		int nObjectCont = m_pBOMngr->GetObjectCount();
 		vector3 v3MinG = m_pBOMngr->GetBoundingObject(0)->GetMinG();
 		vector3 v3MaxG = m_pBOMngr->GetBoundingObject(0)->GetMaxG();
@@ -91,7 +92,12 @@ void MyOctant::Display(void)
 	}
 	m_pMeshMngr->AddCubeToRenderList(glm::translate(m_v3Position) * glm::scale(vector3(m_fSize)), REWHITE, WIRE);
 }
-
+bool MyOctant::GetVisibility() {
+	return isVisible;
+}
+void MyOctant::ToggleVisible() {
+	isVisible = !isVisible;
+}
 void MyOctant::CheckForObjs(void) {
 	for (int i = 0; i < m_pBOMngr->GetObjectCount(); i++) {
 		MyBOClass bo = *m_pBOMngr->GetBoundingObject(i);
