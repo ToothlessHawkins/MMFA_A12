@@ -95,6 +95,17 @@ MyBOClass::MyBOClass(std::vector<vector3> a_lVectorList)
 	m_v3MinG = m_v3Min;
 	m_v3CenterG = m_v3Center;
 	m_v3HalfWidthG = m_v3HalfWidth;
+
+	//list of verteces in model space, probabaklty for bounding box, also probably
+	m_lVertexList = std::vector<vector3>(8);
+	m_lVertexList[leftBottomBack] = vector3(m_v3Min.x, m_v3Min.y, m_v3Min.z); //left bottom back
+	m_lVertexList[leftBottomFront] = vector3(m_v3Min.x, m_v3Min.y, m_v3Max.z); //left bottom front
+	m_lVertexList[leftTopBack] = vector3(m_v3Min.x, m_v3Max.y, m_v3Min.z); //left top back
+	m_lVertexList[leftTopFront] = vector3(m_v3Min.x, m_v3Max.y, m_v3Max.z); //left top front
+	m_lVertexList[rightBottomBack] = vector3(m_v3Max.x, m_v3Min.y, m_v3Min.z); //right bottom back
+	m_lVertexList[rightBottomFront] = vector3(m_v3Max.x, m_v3Min.y, m_v3Max.z); //right bottom front
+	m_lVertexList[rightTopBack] = vector3(m_v3Max.x, m_v3Max.y, m_v3Min.z); //right top back
+	m_lVertexList[rightTopFront] = vector3(m_v3Max.x, m_v3Max.y, m_v3Max.z); //right top front
 }
 MyBOClass::MyBOClass(MyBOClass const& other)
 {
@@ -189,6 +200,7 @@ vector3 MyBOClass::GetMin(void) { return m_v3Min; }
 vector3 MyBOClass::GetMax(void) { return m_v3Max; }
 vector3 MyBOClass::GetMinG(void) { return m_v3MinG; }
 vector3 MyBOClass::GetMaxG(void) { return m_v3MaxG; }
+std::vector<vector3> MyBOClass::GetVertexList(void) { return m_lVertexList; }
 //--- Non Standard Singleton Methods
 void MyBOClass::DisplaySphere(vector3 a_v3Color)
 {
@@ -207,7 +219,91 @@ void MyBOClass::DisplayReAlligned(vector3 a_v3Color)
 }
 bool MyBOClass::SAT(MyBOClass* const a_pOther)
 {
-	//Replace with your solution for A11
+	std::vector<vector3> object1 = m_lVertexList;
+	std::vector<vector3> object2 = a_pOther->GetVertexList();
+
+	for (uint i = 0; i < 8; i++)
+	{
+		object1[i] = vector3(m_m4ToWorld * vector4(object1[i], 1.0f));
+		object2[i] = vector3(a_pOther->m_m4ToWorld * vector4(object2[i], 1.0f));
+	}
+
+	vector3 obj1NormX = object1[leftBottomBack] - object1[rightBottomBack];
+	if (!CheckAxisSAT(object1, object2, obj1NormX)) {
+		return false;
+	}
+
+	vector3 obj1NormY = object1[leftBottomBack] - object1[leftTopBack];
+	if (!CheckAxisSAT(object1, object2, obj1NormY)) {
+		return false;
+	}
+
+	vector3 obj1NormZ = object1[leftBottomBack] - object1[leftBottomFront];
+	if (!CheckAxisSAT(object1, object2, obj1NormZ)) {
+		return false;
+	}
+
+	vector3 obj2NormX = object2[leftBottomBack] - object2[rightBottomBack];
+	if (!CheckAxisSAT(object1, object2, obj2NormX)) {
+		return false;
+	}
+
+	vector3 obj2NormY = object2[leftBottomBack] - object2[leftTopBack];
+	if (!CheckAxisSAT(object1, object2, obj2NormY)) {
+		return false;
+	}
+
+	vector3 obj2NormZ = object2[leftBottomBack] - object2[leftBottomFront];
+	if (!CheckAxisSAT(object1, object2, obj2NormZ)) {
+		return false;
+	}
+
+	vector3 cross1x1 = glm::cross(obj1NormX, obj2NormX);
+	if (!CheckAxisSAT(object1, object2, cross1x1)) {
+		return false;
+	}
+
+	vector3 cross1x2 = glm::cross(obj1NormX, obj2NormY);
+	if (!CheckAxisSAT(object1, object2, cross1x2)) {
+		return false;
+	}
+
+	vector3 cross1x3 = glm::cross(obj1NormX, obj2NormZ);
+	if (!CheckAxisSAT(object1, object2, cross1x3)) {
+		return false;
+	}
+
+	vector3 cross2x1 = glm::cross(obj1NormY, obj2NormX);
+	if (!CheckAxisSAT(object1, object2, cross2x1)) {
+		return false;
+	}
+
+	vector3 cross2x2 = glm::cross(obj1NormY, obj2NormY);
+	if (!CheckAxisSAT(object1, object2, cross2x2)) {
+		return false;
+	}
+
+	vector3 cross2x3 = glm::cross(obj1NormY, obj2NormZ);
+	if (!CheckAxisSAT(object1, object2, cross2x3)) {
+		return false;
+	}
+
+
+	vector3 cross3x1 = glm::cross(obj1NormZ, obj2NormX);
+	if (!CheckAxisSAT(object1, object2, cross3x1)) {
+		return false;
+	}
+
+	vector3 cross3x2 = glm::cross(obj1NormZ, obj2NormY);
+	if (!CheckAxisSAT(object1, object2, cross3x2)) {
+		return false;
+	}
+
+	vector3 cross3x3 = glm::cross(obj1NormZ, obj2NormZ);
+	if (!CheckAxisSAT(object1, object2, cross3x3)) {
+		return false;
+	}
+
 	return true;
 }
 bool MyBOClass::IsColliding(MyBOClass* const a_pOther)
@@ -250,4 +346,35 @@ bool MyBOClass::IsColliding(MyBOClass* const a_pOther)
 		return false;
 
 	return SAT(a_pOther);
+}
+
+bool MyBOClass::CheckAxisSAT(std::vector<vector3> a_lVertices, std::vector<vector3> a_lOtherVertices, vector3 axis)
+{
+	float max1;
+	float min1;
+	float max2;
+	float min2;
+
+	//project each vec3 in the first object onto the axis, saving min and max values
+	for (int c = 0; c < a_lVertices.size(); c++) {
+		vector3 vert = a_lVertices[c];
+		float projectedVert = glm::dot(vert, axis);// / glm::length(vert);
+		if (c == 0 || projectedVert > max1)
+			max1 = projectedVert;
+		if (c == 0 || projectedVert < min1)
+			min1 = projectedVert;
+	}
+
+	//do the same for the second object
+	for (int c = 0; c < a_lOtherVertices.size(); c++) {
+		vector3 vert = a_lOtherVertices[c];
+		float projectedVert = glm::dot(vert, axis);// / glm::length(vert);
+		if (c == 0 || projectedVert > max2)
+			max2 = projectedVert;
+		if (c == 0 || projectedVert < min2)
+			min2 = projectedVert;
+	}
+
+	//if the ranges overlap, return true
+	return !(max1 < min2 || max2 < min1);
 }

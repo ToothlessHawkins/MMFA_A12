@@ -7,6 +7,18 @@ Date: 2015/11
 
 #include "RE\ReEng.h"
 
+//enumerator
+enum points {
+	leftBottomBack,
+	leftBottomFront,
+	leftTopBack,
+	leftTopFront,
+	rightBottomBack,
+	rightBottomFront,
+	rightTopBack,
+	rightTopFront
+};
+
 //System Class
 class MyBOClass
 {
@@ -26,6 +38,8 @@ class MyBOClass
 	vector3 m_v3HalfWidthG = vector3(0.0f);//Will store half the size of all sides
 
 	matrix4 m_m4ToWorld = IDENTITY_M4; //Matrix that will take us from local to world coordinate
+
+	std::vector<vector3> m_lVertexList; // vertex list for SAT
 public:
 	/*
 	USAGE: Constructor
@@ -163,6 +177,12 @@ public:
 	OUTPUT: ---
 	*/
 	void DisplayReAlligned(vector3 a_v3Color = REDEFAULT);
+	/*
+	USAGE: Gets vertex list
+	ARGUMENTS: ---
+	OUTPUT: Vertex list
+	*/
+	std::vector<vector3> GetVertexList(void);
 
 private:
 	/*
@@ -177,6 +197,8 @@ private:
 	OUTPUT: ---
 	*/
 	void Init(void);
+
+	static bool CheckAxisSAT(std::vector<vector3> a_lVertices, std::vector<vector3> a_lOtherVertices, vector3 axis);
 };
 
 #endif //__MYBOCLASS_H__

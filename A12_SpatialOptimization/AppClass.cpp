@@ -69,7 +69,11 @@ void AppClass::Update(void)
 	ArcBall();
 	
 	//Set the model matrix for the first model to be the arcball
-	m_pMeshMngr->SetModelMatrix(ToMatrix4(m_qArcBall), 0);
+	// m_pMeshMngr->SetModelMatrix(ToMatrix4(m_qArcBall), 0);
+
+	// update bounding object manager
+	m_pBOMngr->Update();
+	m_pBOMngr->DisplayOriented(-1, REDEFAULT);
 	
 	//Adds all loaded instance to the render list
 	//m_pMeshMngr->AddSkyboxToRenderList("Skybox_01.png");
@@ -79,7 +83,6 @@ void AppClass::Update(void)
 			m_pOctreeHead->Display();
 	}
 
-
 	//Indicate the FPS
 	int nFPS = m_pSystem->GetFPS();
 	//print info into the console
@@ -87,8 +90,8 @@ void AppClass::Update(void)
 	//Print info on the screen
 	m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), REYELLOW);
 
-	m_pMeshMngr->Print("Selection: ");
-	m_pMeshMngr->PrintLine(m_pMeshMngr->GetInstanceGroupName(m_selection.first, m_selection.second), REYELLOW);
+	// m_pMeshMngr->Print("Selection: ");
+	// m_pMeshMngr->PrintLine(m_pMeshMngr->GetInstanceGroupName(m_selection.first, m_selection.second), REYELLOW);
 	
 	m_pMeshMngr->Print("FPS:");
 	m_pMeshMngr->Print(std::to_string(nFPS), RERED);
