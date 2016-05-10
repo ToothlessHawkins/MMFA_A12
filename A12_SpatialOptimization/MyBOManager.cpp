@@ -210,7 +210,10 @@ void MyBOManager::Update(void)
 	}
 	MyOctant head = MyOctant();
 	head.CheckForObjs();
-	head.Display();
+
+	if(octreeVisible)
+		head.Display();
+
 	CheckCollisions(head);
 }
 void MyBOManager::CheckCollisions(MyOctant octant)
@@ -270,3 +273,7 @@ int MyBOManager::GetIndex(String a_sIndex)
 	return var->second;//Get the index
 }
 int MyBOManager::GetObjectCount(void) { return m_nObjectCount; };
+void MyBOManager::ToggleOctreeVisibility(void)
+{
+	octreeVisible = !octreeVisible;
+}

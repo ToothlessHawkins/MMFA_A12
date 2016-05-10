@@ -70,7 +70,6 @@ public:
 	void Swap(MyOctant& other);
 	void Display(void);
 	bool GetVisibility(void);
-	void ToggleVisible(void);
 	void Subdivide(void);
 	void ReleaseChildren(void);
 	void CheckForObjs(void);

@@ -100,9 +100,6 @@ void MyOctant::Display(void)
 bool MyOctant::GetVisibility() {
 	return isVisible;
 }
-void MyOctant::ToggleVisible() {
-	isVisible = !isVisible;
-}
 void MyOctant::CheckForObjs(void) {
 	for (int i = 0; i < m_pBOMngr->GetObjectCount(); i++) {
 		MyBOClass bo = *m_pBOMngr->GetBoundingObject(i);

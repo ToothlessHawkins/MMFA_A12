@@ -19,6 +19,7 @@ class MyBOManager
 	std::vector<std::vector<int>> m_llCollidingIndices; //List of list of colliding indices.
 	std::map<String, uint> m_mapIndex;//Map relating the mesh and the index
  	//MyOctant * m_oHeadOctant = nullptr;
+	bool octreeVisible = true;
 
 public:
 	int GetObjectCount(void);
@@ -159,6 +160,9 @@ public:
 	OUTPUT: ---
 	*/
 	void Update(void);
+	/*
+	*/
+	void ToggleOctreeVisibility(void);
 
 private:
 	/*
