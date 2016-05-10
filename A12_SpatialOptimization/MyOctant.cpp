@@ -1,7 +1,6 @@
 #include "MyOctant.h"
 using namespace ReEng;
 //  MyOctant
-bool MyOctant::m_bHead = true;
 void MyOctant::Init(void)
 {
 	m_v3Position = vector3(0.0f);
@@ -64,6 +63,10 @@ void MyOctant::Release(void)
 MyOctant::MyOctant(){
 	Init();
 }
+MyOctant::MyOctant(bool isHead) {
+	m_bHead = isHead;
+	Init();
+}
 MyOctant::MyOctant(MyBOManager* bom) {
 	m_pBOMngr = bom;
 	Init();
@@ -120,7 +123,7 @@ void MyOctant::CheckForObjs(void) {
 
 void MyOctant::Subdivide(void)
 {
-	m_bHead = false;
+	//m_bHead = false;
 	m_pChildren = new MyOctant[8];
 	m_nChildCount = 8;
 	float fNewSize = this->m_fSize / 2;

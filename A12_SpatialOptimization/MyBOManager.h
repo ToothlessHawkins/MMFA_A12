@@ -18,8 +18,9 @@ class MyBOManager
 	MeshManagerSingleton* m_pMeshMngr = nullptr;//Mesh Manager Singleton
 	std::vector<std::vector<int>> m_llCollidingIndices; //List of list of colliding indices.
 	std::map<String, uint> m_mapIndex;//Map relating the mesh and the index
- 	//MyOctant * m_oHeadOctant = nullptr;
+ 	// MyOctant * m_oHeadOctant = nullptr;
 	bool octreeVisible = true;
+	bool useOctree = true;
 
 public:
 	int GetObjectCount(void);
@@ -163,6 +164,9 @@ public:
 	/*
 	*/
 	void ToggleOctreeVisibility(void);
+	/*
+	*/
+	void ToggleOctree(void);
 
 private:
 	/*

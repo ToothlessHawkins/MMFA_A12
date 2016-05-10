@@ -26,7 +26,7 @@ class MyOctant
 
 	
 public:
-	static bool m_bHead;
+	bool m_bHead = false;
 	MyOctant* m_pChildren = nullptr;
 	/*
 	Method: MyOctant
@@ -35,6 +35,7 @@ public:
 	Output: class object
 	*/
 	MyOctant(void);
+	MyOctant(bool isHead);
 	MyOctant(MyBOManager* bom);
 	MyOctant(std::vector<MyBOClass> a_lObjs);
 	MyOctant(float a_fSize);

@@ -208,7 +208,7 @@ void MyBOManager::Update(void)
 	{
 		m_llCollidingIndices[nObject].clear();
 	}
-	MyOctant head = MyOctant();
+	MyOctant head = MyOctant(true);
 	head.CheckForObjs();
 
 	if(octreeVisible)
@@ -218,31 +218,47 @@ void MyBOManager::Update(void)
 }
 void MyBOManager::CheckCollisions(MyOctant octant)
 {
-	uint numChildren = octant.GetNumChildren();
-	if (numChildren > 0)
+	if (useOctree)
 	{
-		for (int i = 0; i < numChildren; i++)
-			CheckCollisions(octant.m_pChildren[i]);
-	}
-	else
-	{
-		std::vector<int> octantObjList = octant.GetObjIndexList();
-		if (octantObjList.size() == 0)
-			return;
-		for (uint i = 0; i < octantObjList.size()-1; i++)
+		uint numChildren = octant.GetNumChildren();
+		if (numChildren > 0)
 		{
-			for (uint c = i + 1; c < octantObjList.size(); c++)
+			for (int i = 0; i < numChildren; i++)
+				CheckCollisions(octant.m_pChildren[i]);
+		}
+		else
+		{
+			std::vector<int> octantObjList = octant.GetObjIndexList();
+			if (octantObjList.size() == 0)
+				return;
+			for (uint i = 0; i < octantObjList.size() - 1; i++)
 			{
-				int obj1 = octantObjList[i];
-				int obj2 = octantObjList[c];
-				if (m_lObject[obj1]->IsColliding(m_lObject[obj2]))
+				for (uint c = i + 1; c < octantObjList.size(); c++)
 				{
-					m_llCollidingIndices[obj1].push_back(obj2);
-					m_llCollidingIndices[obj2].push_back(obj1);
+					int obj1 = octantObjList[i];
+					int obj2 = octantObjList[c];
+					if (m_lObject[obj1]->IsColliding(m_lObject[obj2]))
+					{
+						m_llCollidingIndices[obj1].push_back(obj2);
+						m_llCollidingIndices[obj2].push_back(obj1);
+					}
 				}
 			}
 		}
-	}	
+	}
+	else {
+		for (uint i = 0; i < m_nObjectCount - 1; i++)
+		{
+			for (uint c = i + 1; c < m_nObjectCount; c++)
+			{
+				if (m_lObject[i]->IsColliding(m_lObject[c]))
+				{
+					m_llCollidingIndices[i].push_back(c);
+					m_llCollidingIndices[c].push_back(i);
+				}
+			}
+		}
+	}
 }
 std::vector<int> MyBOManager::GetCollidingVector(String a_sIndex)
 {
@@ -276,4 +292,8 @@ int MyBOManager::GetObjectCount(void) { return m_nObjectCount; };
 void MyBOManager::ToggleOctreeVisibility(void)
 {
 	octreeVisible = !octreeVisible;
+}
+void MyBOManager::ToggleOctree(void)
+{
+	useOctree = !useOctree;
 }
