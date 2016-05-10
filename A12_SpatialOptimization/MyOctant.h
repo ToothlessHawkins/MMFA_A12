@@ -9,6 +9,7 @@ Date: 2015/06
 #include "RE\ReEng.h"
 #include "MyBOManager.h"
 
+class MyBOManager;
 //System Class
 class MyOctant
 {
@@ -21,7 +22,7 @@ class MyOctant
 	bool isVisible;
 
 	//banana
-	std::vector<MyBOClass> m_lNumOfObjs = std::vector<MyBOClass>();
+	std::vector<int> m_lObjIndices = std::vector<int>();
 
 	
 public:
@@ -34,6 +35,7 @@ public:
 	Output: class object
 	*/
 	MyOctant(void);
+	MyOctant(MyBOManager* bom);
 	MyOctant(std::vector<MyBOClass> a_lObjs);
 	MyOctant(float a_fSize);
 	/*
@@ -72,6 +74,8 @@ public:
 	void Subdivide(void);
 	void ReleaseChildren(void);
 	void CheckForObjs(void);
+	uint GetNumChildren(void);
+	const std::vector<int>& GetObjIndexList(void);
 private:
 	/*
 	Method: Release

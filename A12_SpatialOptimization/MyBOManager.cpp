@@ -5,6 +5,8 @@ void MyBOManager::Init(void)
 {
 	m_pMeshMngr = MeshManagerSingleton::GetInstance();
 	m_nObjectCount = 0;
+	//m_oHeadOctant = new MyOctant(this);
+	//m_oHeadOctant->CheckForObjs();
 }
 void MyBOManager::Release(void)
 {
@@ -19,6 +21,7 @@ void MyBOManager::Release(void)
 	}
 	m_lObject.clear();
 	m_llCollidingIndices.clear();
+	//delete m_oHeadOctant;
 }
 MyBOManager* MyBOManager::GetInstance()
 {
@@ -205,21 +208,38 @@ void MyBOManager::Update(void)
 	{
 		m_llCollidingIndices[nObject].clear();
 	}
-	CheckCollisions();
+	MyOctant head = MyOctant();
+	head.CheckForObjs();
+	head.Display();
+	CheckCollisions(head);
 }
-void MyBOManager::CheckCollisions(void)
+void MyBOManager::CheckCollisions(MyOctant octant)
 {
-	for (uint nObjectA = 0; nObjectA < m_nObjectCount - 1; nObjectA++)
+	uint numChildren = octant.GetNumChildren();
+	if (numChildren > 0)
 	{
-		for (uint nObjectB = nObjectA + 1; nObjectB < m_nObjectCount; nObjectB++)
+		for (int i = 0; i < numChildren; i++)
+			CheckCollisions(octant.m_pChildren[i]);
+	}
+	else
+	{
+		std::vector<int> octantObjList = octant.GetObjIndexList();
+		if (octantObjList.size() == 0)
+			return;
+		for (uint i = 0; i < octantObjList.size()-1; i++)
 		{
-			if (m_lObject[nObjectA]->IsColliding(m_lObject[nObjectB]))
+			for (uint c = i + 1; c < octantObjList.size(); c++)
 			{
-				m_llCollidingIndices[nObjectA].push_back(nObjectB);
-				m_llCollidingIndices[nObjectB].push_back(nObjectA);
+				int obj1 = octantObjList[i];
+				int obj2 = octantObjList[c];
+				if (m_lObject[obj1]->IsColliding(m_lObject[obj2]))
+				{
+					m_llCollidingIndices[obj1].push_back(obj2);
+					m_llCollidingIndices[obj2].push_back(obj1);
+				}
 			}
 		}
-	}
+	}	
 }
 std::vector<int> MyBOManager::GetCollidingVector(String a_sIndex)
 {

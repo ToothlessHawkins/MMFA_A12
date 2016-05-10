@@ -32,8 +32,8 @@ void AppClass::InitVariables(void)
 		m_pBOMngr->AddObject(sName);
 	}
 
-	m_pOctreeHead = new MyOctant();
-	m_pOctreeHead->CheckForObjs();
+	//m_pOctreeHead = new MyOctant();
+	//m_pOctreeHead->CheckForObjs();
 	//m_pOctreeHead->Subdivide();
 
 	//for (uint p = 0; p < 8; p++) {
@@ -79,9 +79,9 @@ void AppClass::Update(void)
 	//m_pMeshMngr->AddSkyboxToRenderList("Skybox_01.png");
 	m_pMeshMngr->AddInstanceToRenderList("ALL");
 
-	if (m_pOctreeHead->GetVisibility()) {
+	/*if (m_pOctreeHead->GetVisibility()) {
 			m_pOctreeHead->Display();
-	}
+	}*/
 
 	//Indicate the FPS
 	int nFPS = m_pSystem->GetFPS();

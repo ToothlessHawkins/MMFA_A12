@@ -6,7 +6,9 @@ Date: 2015/11
 #define __MYBOMANAGER_H_
 
 #include "MyBOClass.h"
+#include "MyOctant.h"
 
+class MyOctant;
 //System Class
 class MyBOManager
 {
@@ -16,6 +18,7 @@ class MyBOManager
 	MeshManagerSingleton* m_pMeshMngr = nullptr;//Mesh Manager Singleton
 	std::vector<std::vector<int>> m_llCollidingIndices; //List of list of colliding indices.
 	std::map<String, uint> m_mapIndex;//Map relating the mesh and the index
+ 	//MyOctant * m_oHeadOctant = nullptr;
 
 public:
 	int GetObjectCount(void);
@@ -199,7 +202,7 @@ private:
 	ARGUMENTS: ---
 	OUTPUT: ---
 	*/
-	void CheckCollisions(void);
+	void CheckCollisions(MyOctant octant);
 };
 
 #endif //__MYBOMANAGER_H_

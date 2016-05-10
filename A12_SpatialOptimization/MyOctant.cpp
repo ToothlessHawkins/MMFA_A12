@@ -9,7 +9,7 @@ void MyOctant::Init(void)
 	m_fSize = 0.0f;
 	m_nChildCount = 0;
 	isVisible = true;
-	m_pBOMngr = MyBOManager::GetInstance();
+	if (m_pBOMngr == nullptr) m_pBOMngr = MyBOManager::GetInstance();
 
 	if (m_bHead)
 	{
@@ -58,9 +58,14 @@ void MyOctant::Swap(MyOctant& other)
 }
 void MyOctant::Release(void)
 {
+	ReleaseChildren();
 }
 //The big 3
 MyOctant::MyOctant(){
+	Init();
+}
+MyOctant::MyOctant(MyBOManager* bom) {
+	m_pBOMngr = bom;
 	Init();
 }
 MyOctant::MyOctant(std::vector<MyBOClass> a_lObjs) {
@@ -106,10 +111,10 @@ void MyOctant::CheckForObjs(void) {
 			&& boCenter.y < m_v3Position.y + m_v3Size.y / 2 && boCenter.y > m_v3Position.y - m_v3Size.y / 2
 			&& boCenter.z < m_v3Position.z + m_v3Size.z / 2 && boCenter.z > m_v3Position.z - m_v3Size.z / 2)
 		{
-			m_lNumOfObjs.push_back(bo);
+			m_lObjIndices.push_back(i);
 		}
 	}
-	if (m_lNumOfObjs.size() > MAXOBJECTSINOCTANT)
+	if (m_lObjIndices.size() > MAXOBJECTSINOCTANT)
 	{
 		Subdivide();
 		printf("subdivide");
@@ -185,9 +190,21 @@ void MyOctant::ReleaseChildren(void)
 {
 	if (m_pChildren != nullptr)
 	{
+		for (int i = 0; i < m_nChildCount; i++)
+			m_pChildren[i].ReleaseChildren();
 		delete[] m_pChildren;
 		m_pChildren = nullptr;
 	}
+	m_nChildCount = 0;
+}
+
+uint MyOctant::GetNumChildren(void)
+{
+	return m_nChildCount;
+}
+
+const std::vector<int>& MyOctant::GetObjIndexList(void) {
+	return m_lObjIndices;
 }
 //Accessors
 
