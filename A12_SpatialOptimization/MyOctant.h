@@ -27,6 +27,7 @@ class MyOctant
 	
 public:
 	bool m_bHead = false;
+	static int m_numDivisions;
 	MyOctant* m_pChildren = nullptr;
 	/*
 	Method: MyOctant
@@ -34,6 +35,7 @@ public:
 	Arguments: ---
 	Output: class object
 	*/
+	
 	MyOctant(void);
 	MyOctant(bool isHead);
 	MyOctant(MyBOManager* bom);

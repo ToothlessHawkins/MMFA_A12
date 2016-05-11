@@ -140,12 +140,9 @@ void MyBOManager::DisplayOriented(int a_nIndex, vector3 a_v3Color)
 	if (a_nIndex >= 0)
 	{
 		//Default will render in white for non colliding and red for colliding
-		if (v3Color == REDEFAULT)
-		{
 			v3Color = REWHITE;
 			if (m_llCollidingIndices[a_nIndex].size() > 0)
 				v3Color = RERED;
-		}
 		m_lObject[a_nIndex]->DisplayOriented(v3Color);
 	}
 	else
@@ -153,12 +150,10 @@ void MyBOManager::DisplayOriented(int a_nIndex, vector3 a_v3Color)
 		for (uint nObject = 0; nObject < m_nObjectCount; nObject++)
 		{
 			//Default will render in white for non colliding and red for colliding
-			if (v3Color == REDEFAULT)
-			{
 				v3Color = REWHITE;
 				if (m_llCollidingIndices[nObject].size() > 0)
 					v3Color = RERED;
-			}
+			
 			m_lObject[nObject]->DisplayOriented(v3Color);
 		}
 	}
@@ -216,7 +211,7 @@ void MyBOManager::Update(void)
 
 	CheckCollisions(head);
 }
-void MyBOManager::CheckCollisions(MyOctant octant)
+void MyBOManager::CheckCollisions(MyOctant &octant)
 {
 	if (useOctree)
 	{
@@ -239,6 +234,7 @@ void MyBOManager::CheckCollisions(MyOctant octant)
 					int obj2 = octantObjList[c];
 					if (m_lObject[obj1]->IsColliding(m_lObject[obj2]))
 					{
+
 						m_llCollidingIndices[obj1].push_back(obj2);
 						m_llCollidingIndices[obj2].push_back(obj1);
 					}
@@ -253,6 +249,7 @@ void MyBOManager::CheckCollisions(MyOctant octant)
 			{
 				if (m_lObject[i]->IsColliding(m_lObject[c]))
 				{
+
 					m_llCollidingIndices[i].push_back(c);
 					m_llCollidingIndices[c].push_back(i);
 				}

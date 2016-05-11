@@ -51,6 +51,7 @@ void MyOctant::Init(void)
 			m_fSize = fSizeZ;
 	}
 }
+int MyOctant::m_numDivisions = 0;
 void MyOctant::Swap(MyOctant& other)
 {
 
@@ -107,18 +108,21 @@ void MyOctant::CheckForObjs(void) {
 	for (int i = 0; i < m_pBOMngr->GetObjectCount(); i++) {
 		MyBOClass bo = *m_pBOMngr->GetBoundingObject(i);
 		vector3 boCenter = bo.GetCenterGlobal();
-		if (boCenter.x < m_v3Position.x + m_v3Size.x / 2 && boCenter.x > m_v3Position.x - m_v3Size.x / 2
-			&& boCenter.y < m_v3Position.y + m_v3Size.y / 2 && boCenter.y > m_v3Position.y - m_v3Size.y / 2
-			&& boCenter.z < m_v3Position.z + m_v3Size.z / 2 && boCenter.z > m_v3Position.z - m_v3Size.z / 2)
+		if (boCenter.x - bo.GetRadius() < m_v3Position.x + m_v3Size.x / 2 && boCenter.x + bo.GetRadius() > m_v3Position.x - m_v3Size.x / 2
+			&& boCenter.y - bo.GetRadius()  < m_v3Position.y + m_v3Size.y / 2 && boCenter.y + bo.GetRadius()  > m_v3Position.y - m_v3Size.y / 2
+			&& boCenter.z - bo.GetRadius()  < m_v3Position.z + m_v3Size.z / 2 && boCenter.z + bo.GetRadius()  > m_v3Position.z - m_v3Size.z / 2)
 		{
 			m_lObjIndices.push_back(i);
 		}
 	}
-	if (m_lObjIndices.size() > MAXOBJECTSINOCTANT)
+	if (m_lObjIndices.size() > MAXOBJECTSINOCTANT && m_numDivisions < 5)
 	{
+	
 		Subdivide();
-		printf("subdivide");
+		
+		//printf("subdivide");
 	}
+
 }
 
 void MyOctant::Subdivide(void)
@@ -182,9 +186,11 @@ void MyOctant::Subdivide(void)
 	m_pChildren[7].m_v3Position.y -= fNewSize;
 	m_pChildren[7].m_v3Position.z -= fNewSize;
 	m_pChildren[7].m_v3Size = v3NewSize;
-
-	for (int i = 0; i < m_nChildCount; i++)
+	m_numDivisions++;
+	for (int i = 0; i < m_nChildCount; i++) {
 		m_pChildren[i].CheckForObjs();
+	}
+	MyOctant::m_numDivisions -= 1;
 }
 void MyOctant::ReleaseChildren(void)
 {

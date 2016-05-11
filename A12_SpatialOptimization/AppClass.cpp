@@ -11,7 +11,7 @@ void AppClass::InitWindow(String a_sWindowName)
 	//m_pSystem->SetWindowFullscreen(); //Sets the window to be fullscreen
 	//m_pSystem->SetWindowBorderless(true); //Sets the window to not have borders
 }
-
+int AppClass::m_numFrames = 0;
 void AppClass::InitVariables(void)
 {
 	//Reset the selection to -1, -1
@@ -72,7 +72,8 @@ void AppClass::Update(void)
 	// m_pMeshMngr->SetModelMatrix(ToMatrix4(m_qArcBall), 0);
 
 	// update bounding object manager
-	m_pBOMngr->Update();
+		m_pBOMngr->Update();
+
 	m_pBOMngr->DisplayOriented(-1, REDEFAULT);
 	
 	//Adds all loaded instance to the render list
@@ -92,7 +93,8 @@ void AppClass::Update(void)
 
 	// m_pMeshMngr->Print("Selection: ");
 	// m_pMeshMngr->PrintLine(m_pMeshMngr->GetInstanceGroupName(m_selection.first, m_selection.second), REYELLOW);
-	
+	m_numFrames++;
+//	m_pMeshMngr->Print(std::to_string(m_numFrames));
 	m_pMeshMngr->Print("FPS:");
 	m_pMeshMngr->Print(std::to_string(nFPS), RERED);
 }

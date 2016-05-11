@@ -17,7 +17,7 @@ class AppClass : public ReEngAppClass
 	MyBOManager* m_pBOMngr = nullptr;
 public:
 	typedef ReEngAppClass super;
-
+	static int m_numFrames;
 	/*
 	USAGE: Constructor
 	ARGUMENTS: 

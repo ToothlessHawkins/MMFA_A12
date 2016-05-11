@@ -160,7 +160,7 @@ public:
 	ARGUMENTS: ---
 	OUTPUT: ---
 	*/
-	void Update(void);
+	void Update();
 	/*
 	*/
 	void ToggleOctreeVisibility(void);
@@ -210,7 +210,7 @@ private:
 	ARGUMENTS: ---
 	OUTPUT: ---
 	*/
-	void CheckCollisions(MyOctant octant);
+	void CheckCollisions(MyOctant &octant);
 };
 
 #endif //__MYBOMANAGER_H_
