@@ -203,8 +203,13 @@ void MyBOManager::Update(void)
 	{
 		m_llCollidingIndices[nObject].clear();
 	}
-	MyOctant head = MyOctant(true);
-	head.CheckForObjs();
+	static MyOctant head = MyOctant(true);
+	
+	if (buildOctree)
+	{
+		head.CheckForObjs();
+		buildOctree = false;
+	}
 
 	if(octreeVisible)
 		head.Display();
@@ -224,7 +229,7 @@ void MyBOManager::CheckCollisions(MyOctant &octant)
 		else
 		{
 			std::vector<int> octantObjList = octant.GetObjIndexList();
-			if (octantObjList.size() == 0)
+			if (octantObjList.size() < 2)
 				return;
 			for (uint i = 0; i < octantObjList.size() - 1; i++)
 			{
@@ -293,4 +298,8 @@ void MyBOManager::ToggleOctreeVisibility(void)
 void MyBOManager::ToggleOctree(void)
 {
 	useOctree = !useOctree;
+}
+void MyBOManager::BuildOctree(void)
+{
+	buildOctree = true;
 }

@@ -96,7 +96,15 @@ void AppClass::Update(void)
 	m_numFrames++;
 //	m_pMeshMngr->Print(std::to_string(m_numFrames));
 	m_pMeshMngr->Print("FPS:");
-	m_pMeshMngr->Print(std::to_string(nFPS), RERED);
+	m_pMeshMngr->PrintLine(std::to_string(nFPS), RERED);
+
+	m_pMeshMngr->PrintLine("Hold B: Build Octree");
+
+	m_pMeshMngr->Print("O: Toggle Octree On:");
+	m_pMeshMngr->PrintLine(std::to_string(m_pBOMngr->getOctOn()), REPURPLE);
+
+	m_pMeshMngr->Print("V: Toggle Octree Visible:");
+	m_pMeshMngr->PrintLine(std::to_string(m_pBOMngr->getOctVis()), REPURPLE);
 }
 
 void AppClass::Display(void)

@@ -115,7 +115,7 @@ void MyOctant::CheckForObjs(void) {
 			m_lObjIndices.push_back(i);
 		}
 	}
-	if (m_lObjIndices.size() > MAXOBJECTSINOCTANT && m_numDivisions < 5)
+	if (m_lObjIndices.size() > MAXOBJECTSINOCTANT && m_numDivisions < MAXDEPTHINOCTANT)
 	{
 	
 		Subdivide();

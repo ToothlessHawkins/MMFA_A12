@@ -21,6 +21,7 @@ class MyBOManager
  	// MyOctant * m_oHeadOctant = nullptr;
 	bool octreeVisible = true;
 	bool useOctree = true;
+	bool buildOctree = false;
 
 public:
 	int GetObjectCount(void);
@@ -167,6 +168,18 @@ public:
 	/*
 	*/
 	void ToggleOctree(void);
+	/*
+	*/
+	void BuildOctree(void);
+
+
+	bool getOctVis(void) {
+		return octreeVisible;
+	}
+
+	bool getOctOn(void) {
+		return useOctree;
+	}
 
 private:
 	/*

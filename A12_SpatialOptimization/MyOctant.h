@@ -4,7 +4,8 @@ Date: 2015/06
 ----------------------------------------------*/
 #ifndef __MyOctant_H_
 #define __MyOctant_H_
-#define MAXOBJECTSINOCTANT 3
+#define MAXOBJECTSINOCTANT 15
+#define MAXDEPTHINOCTANT 3
 
 #include "RE\ReEng.h"
 #include "MyBOManager.h"
